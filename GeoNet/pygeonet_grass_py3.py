@@ -28,7 +28,7 @@ def grass(filteredDemArray):
     # Query GRASS 7 itself for its GISBASE
     startcmd = [grass7bin, '--config', 'path']
 
-    p = subprocess.Popen(startcmd, shell=True,
+    p = subprocess.Popen(startcmd, shell=False,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     if p.returncode != 0:
