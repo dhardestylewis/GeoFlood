@@ -1,0 +1,22 @@
+name: geoflood
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - geopandas
+  - gdal
+  - netcdf4
+  - numba
+  - statsmodels
+  - scipy
+  - numpy
+  - pandas
+  - matplotlib
+  - rasterio
+  - affine
+  - python=3.7
+  - scikit-fmm
+  - psutil
+  - dask
+  - scikit-image
+prefix: /opt/conda/envs/GGenv

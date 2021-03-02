@@ -5,6 +5,7 @@ import shutil
 import subprocess
 from time import perf_counter 
 from pygeonet_rasterio import *
+import rasterio
 
 
 def grass(filteredDemArray):
@@ -28,7 +29,7 @@ def grass(filteredDemArray):
     # Query GRASS 7 itself for its GISBASE
     startcmd = [grass7bin, '--config', 'path']
 
-    p = subprocess.Popen(startcmd, shell=True,
+    p = subprocess.Popen(startcmd, shell=False,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     if p.returncode != 0:
@@ -200,6 +201,27 @@ def grass(filteredDemArray):
                   output=os.path.join(Parameters.geonetResultsDir,
                                       outputBAS_filename),\
                   format='GTiff')
+    with rasterio.open(geotiff,'r') as geotiff_f:
+        with rasterio.open(
+            os.path.join(Parameters.geonetResultsDir,outlet_filename),
+            'r+'
+        ) as raster:
+            raster.crs = geotiff_f.crs
+        with rasterio.open(
+            os.path.join(Parameters.geonetResultsDir,outputFAC_filename),
+            'r+'
+        ) as raster:
+            raster.crs = geotiff_f.crs
+        with rasterio.open(
+            os.path.join(Parameters.geonetResultsDir,outputFDR_filename),
+            'r+'
+        ) as raster:
+            raster.crs = geotiff_f.crs
+        with rasterio.open(
+            os.path.join(Parameters.geonetResultsDir,outputBAS_filename),
+            'r+'
+        ) as raster:
+            raster.crs = geotiff_f.crs
 
 def main():
     filteredDemArray = read_geotif_filteredDEM()

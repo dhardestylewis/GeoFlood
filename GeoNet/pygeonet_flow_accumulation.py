@@ -61,7 +61,7 @@ def flowaccumulation(filteredDemArray):
     outputBAS_filename = geotiffmapraster + '_basins.tif'
     ## plot the flow directions
     nanDemArrayfdr = read_geotif_generic(Parameters.geonetResultsDir,
-                                         outputFDR_filename)
+                                         outputFDR_filename)[0]
     if defaults.doPlot == 1:
         raster_plot(nanDemArrayfdr, 'Flow directions DEM')
     """
@@ -81,12 +81,12 @@ def flowaccumulation(filteredDemArray):
     # print ([[outlets[0][i], outlets[1][i]] for i in range(len(outlets[0]))])
     # plot the flow accumulation
     nanDemArrayfac = read_geotif_generic(Parameters.geonetResultsDir,
-                                         outputFAC_filename)
+                                         outputFAC_filename)[0]
     if defaults.doPlot == 1:
         raster_plot(nanDemArrayfac, 'Flow accumulations DEM')
     # getting the bigbasins from the r.streams.basins modules
     nanDemArraybasins = read_geotif_generic(Parameters.geonetResultsDir,
-                                            outputBAS_filename)
+                                            outputBAS_filename)[0]
     nanDemArraybasins[np.isnan(filteredDemArray)] = 0
     # write outlet info into a csv file
     outlet_tablename = geotiffmapraster + '_outlets.csv'
