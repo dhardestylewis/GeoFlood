@@ -7,6 +7,7 @@ from time import perf_counter
 import configparser
 import inspect
 from GeoFlood_Filename_Finder import cfg_finder
+import rasterio
 
 
 def segment_catchment_delineation(fdrfn, segshp, segcatfn):
@@ -131,7 +132,7 @@ def segment_catchment_delineation(fdrfn, segshp, segcatfn):
                   output='fdr',overwrite=True)
     g.run_command('g.region', raster='fdr')
     # Read the channel segment shapefile
-    g.run_command('v.in.ogr', input=segshp,
+    g.run_command('v.in.ogr', flags='o', input=segshp,
                   output='Segment')
     g.run_command('v.to.rast', input='Segment', use='attr',
                   output='stream', attribute_column='HYDROID')
@@ -142,6 +143,9 @@ def segment_catchment_delineation(fdrfn, segshp, segcatfn):
                   input='subbasins', type='Int16',
                   output=segcatfn,
                   format='GTiff')
+    with rasterio.open(fdrfn,'r') as fdrf:
+        with rasterio.open(segcatfn,'r+') as segcatf:
+            segcatf.crs = fdrf.crs
 
 def main():
     geofloodHomeDir,projectName,DEM_name,chunk_status,input_fn,output_fn,hr_status = cfg_finder()
