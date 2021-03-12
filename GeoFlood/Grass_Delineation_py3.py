@@ -82,8 +82,11 @@ def segment_catchment_delineation(fdrfn, segshp, segcatfn):
     os.environ['LOCALE'] = 'C'
 
     # Location
-    location = 'geonet'
-    os.environ['LOCATION_NAME'] = location
+    if os.environ.get('LOCATION_NAME') is not None:
+        location = os.environ['LOCATION_NAME']
+    else:
+        location = 'geonet'
+        os.environ['LOCATION_NAME'] = location
     grassGISlocation = os.path.join(gisdb, location)
     if os.path.exists(grassGISlocation):
         print("Cleaning existing Grass location")

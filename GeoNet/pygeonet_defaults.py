@@ -11,7 +11,7 @@ import pygeonet_prepare as Parameters
 # Reporting, plotting and file handling
 doFileOutput = 1
 doReport = 1
-doPlot = 1
+doPlot = 0
 doResetFiguresOnStart = 1
 
 

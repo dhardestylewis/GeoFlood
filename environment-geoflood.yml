@@ -19,4 +19,4 @@ dependencies:
   - psutil
   - dask
   - scikit-image
-prefix: /opt/conda/envs/GGenv
+prefix: /opt/conda/envs/geoflood
