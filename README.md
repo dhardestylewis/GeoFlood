@@ -22,10 +22,28 @@ GeoNet3
   - *Requirements.txt*
   
 # Environment
+There are 4 ways to prepare the Python environment.
+
+To install the latest Python packages using Conda:
 ```
-conda create env --file geofloodenv.yml
+conda create env --file environment-geoflood.yml
 ```
-  
+
+To install the latest Python packages using Pip:
+```
+pip install -r environment-geoflood.txt
+```
+
+To install the last tested Python environment using Conda
+```
+conda create env --file environment-geoflood_lts.yml
+```
+
+To install the last tested Python environment using Pip:
+```
+pip install -r environment-geoflood_lts.txt
+```
+
 # Configuration 
 Navigate to the *GeoNet* directory
 
