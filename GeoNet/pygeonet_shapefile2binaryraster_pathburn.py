@@ -13,12 +13,13 @@ def main():
     geofloodHomeDir = sys.argv[1]
     projectName = sys.argv[2]
     DEM_name = sys.argv[3]
-    geofloodOutputsDir = os.path.join(geofloodHomeDir,"Outputs","GIS",projectName)
-    geofloodInputsDir = os.path.join(geofloodHomeDir,"Inputs","GIS",projectName)
+    geofloodOutputsDir = os.path.join(geofloodHomeDir,"GeoOutputs","GIS",projectName)
+    geofloodInputsDir = os.path.join(geofloodHomeDir,"GeoInputs","GIS",projectName)
     shapefileDataDir = os.path.join(geofloodInputsDir,"Flowline.shp")
-    pmGrassGisfileName = os.path.join(geofloodOutputsDir,"PM_filtered_grassgis.tif")
     skeletonDataDir = os.path.join(geofloodOutputsDir,DEM_name) 
     skeletonFile = skeletonDataDir + '_skeleton.tif'
+    metaDataDir = os.path.join(geofloodOutputsDir,DEM_name) 
+    metaFile = metaDataDir + '_slp.tif'
     
     # Read Shapefile as GeoPandas DataFrame
     NHDPlusMR_shp = gpd.read_file(shapefileDataDir)
@@ -29,10 +30,10 @@ def main():
     # Subset the DataFrame to just the geometry and value columns
     NHDPlusMR_shp = NHDPlusMR_shp[['geometry','value']]
 
-    # Extract metadata from pygeonet_skeleton_defintion.py _skeleton.tif
-    filteredDemArray = read_geotif_filteredDEM(pmGrassGisfileName)
-    skeleton_raster = rasterio.open(skeletonFile)
-    meta = skeleton_raster.meta.copy()
+    # Extract metadata from original tif
+    meta_raster = read_dem_from_geotiff(os.path.basename(metaFile),geofloodOutputsDir)
+    meta_raster = rasterio.open(metaFile)
+    meta = meta_raster.meta.copy()
     meta.update(compress='lzw')
     # print(meta)
 
