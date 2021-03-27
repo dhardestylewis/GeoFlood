@@ -4,11 +4,14 @@ import sys
 import inspect
 
 def cfg_finder():
-    current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    cfg_pointer_fn = os.path.join(current_dir,"GeoNet","project_pointer.cfg")
-    config_point = configparser.ConfigParser()
-    config_point.read(cfg_pointer_fn)
-    main_cfg = config_point.get('CFG Directory','project_cfg_pointer')
+    if os.environ.get('PROJECT_CFG') is not None:
+        main_cfg = os.environ.get('PROJECT_CFG')
+    else:
+        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        cfg_pointer_fn = os.path.join(current_dir,"GeoNet","project_pointer.cfg")
+        config_point = configparser.ConfigParser()
+        config_point.read(cfg_pointer_fn)
+        main_cfg = config_point.get('CFG Directory','project_cfg_pointer')
     print(f'Using configuration settings here: {main_cfg}')
     config = configparser.ConfigParser()
     config.read(main_cfg)

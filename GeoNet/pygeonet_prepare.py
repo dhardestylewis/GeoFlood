@@ -33,9 +33,12 @@ I'd strongly suggest you keep the file structure as is, but if you are strongly 
 feel free to change it.
 """
 # Read pointer cfg file, which points to the project specific cfg file.
-config = configparser.ConfigParser()
-config.read(os.path.join(os.path.dirname(os.path.abspath(__file__)),'project_pointer.cfg'))
-project_cfg_path = config.get('CFG Directory', 'project_cfg_pointer')
+if os.environ.get('PROJECT_CFG') is not None:
+    project_cfg_path = os.environ.get('PROJECT_CFG')
+else:
+    config = configparser.ConfigParser()
+    config.read(os.path.join(os.path.dirname(os.path.abspath(__file__)),'project_pointer.cfg'))
+    project_cfg_path = config.get('CFG Directory', 'project_cfg_pointer')
 
 # Read project specific cfg name and define base variables
 config2 = configparser.ConfigParser()
