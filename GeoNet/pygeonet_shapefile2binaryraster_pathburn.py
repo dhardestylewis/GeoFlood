@@ -40,15 +40,25 @@ def main():
     # Assign GeoSpatial raster data
     with rasterio.open(skeletonFile,'w+',**meta) as out:
         out_arr = out.read(1)
+        out_transform = out.transform
         # print(out_arr)
-        shapes = ((geom,val) for geom,val in zip(NHDPlusMR_shp.geometry,NHDPlusMR_shp.value))
-        NHDPlusMR_raster = features.rasterize(shapes=shapes,fill=1,out=out_arr,transform=out.transform)
+    shapes = ((geom,val) for geom,val in zip(NHDPlusMR_shp.geometry,NHDPlusMR_shp.value))
+    NHDPlusMR_raster = features.rasterize(shapes=shapes,fill=0,out=out_arr,transform=out_transform)
 
     NHDPlusMR_raster = NHDPlusMR_raster.astype(np.uint8)
+    meta.update(dtype=np.uint8)
+    meta.update(nodata='255')
+    NHDPlusMR_raster[np.logical_and(
+        meta_raster.read(1) != meta_raster.nodata,
+        NHDPlusMR_raster != 1
+    )] = 0
 
     # Write outputs
     OutputFileName = DEM_name + '_path.tif'
-    write_geotif_skeleton(NHDPlusMR_raster,geofloodOutputsDir,OutputFileName)
+    OutputFilePath = os.path.join(geofloodOutputsDir,OutputFileName) 
+    #write_geotif_skeleton(NHDPlusMR_raster,geofloodOutputsDir,OutputFileName)
+    with rasterio.open(OutputFilePath,'w',**meta) as out:
+        out.write(NHDPlusMR_raster, 1)
 
 if __name__ == '__main__':
     t0 = perf_counter()
