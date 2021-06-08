@@ -1,6 +1,6 @@
 from __future__ import division
 import os
-import gdal, osr
+from osgeo import gdal, osr
 import psutil
 import math
 import numpy as np
